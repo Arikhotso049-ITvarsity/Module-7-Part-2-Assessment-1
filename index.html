@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+      <head>
+            <link rel="stylesheet" href="style.css">
+      </head>
+
+      <body>
+            <div id="container">
+
+                  <h1>Countdown Timer</h1>
+
+                  <p>Set your time and start the countdown</p>
+
+                  <div id="timer">
+
+                        <div class="time-box">
+                              <h2>Hours</h2>
+                              <input type="number" id="hours" value="0" min="0">
+                        </div>
+
+                        <div class="time-box">
+                              <h2>Minutes</h2>
+                              <input type="number" id="minutes" value="1" min="0" max="59">
+                        </div>
+
+                        <div class="time-box">
+                              <h2>Seconds</h2>
+                              <input type="number" id="seconds" value="0" min="0" max="59">
+                        </div>
+
+                  </div>
+
+                  <div id="display">
+                        <p id="countdown">00:01:00</p>
+                  </div>
+
+                  <div id="progress-container">
+                        <div id="progress-bar"></div>
+                  </div>
+
+                  <div id="buttons">
+                        <button onclick="startTimer()">Start Timer</button>
+                        <button onclick="cancelTimer()">Cancel</button>
+                  </div>
+
+                  <p id="message"></p>
+
+            </div>
+
+            <script type="text/javascript">
+
+var timer;
+
+var totalTime = 0;
+
+var remainingTime = 0;
+
+/*
+This function displays the
+remaining hours, minutes and seconds.
+*/
+
+function displayCountdown() {
+
+var hours = Math.floor(remainingTime / 3600);
+
+var minutes = Math.floor((remainingTime % 3600) / 60);
+
+var seconds = remainingTime % 60;
+
+
+if (hours < 10) {
+
+    hours = "0" + hours;
+
+}
+
+
+if (minutes < 10) {
+
+    minutes = "0" + minutes;
+
+}
+
+
+if (seconds < 10) {
+
+    seconds = "0" + seconds;
+
+}
+
+
+document.getElementById("countdown").innerHTML =
+
+    hours + ":" + minutes + ":" + seconds;
+
+
+updateProgressBar();
+
+
+}
+
+/*
+This function updates
+the progress bar.
+*/
+
+function updateProgressBar() {
+
+if (totalTime > 0) {
+
+    var progress =
+
+        ((totalTime - remainingTime) / totalTime) * 100;
+
+
+    document.getElementById("progress-bar").style.width =
+
+        progress + "%";
+
+}
+
+
+}
+
+/*
+This function starts
+the countdown timer.
+*/
+
+function startTimer() {
+
+clearInterval(timer);
+
+
+var hours = parseInt(
+
+    document.getElementById("hours").value
+
+) || 0;
+
+
+var minutes = parseInt(
+
+    document.getElementById("minutes").value
+
+) || 0;
+
+
+var seconds = parseInt(
+
+    document.getElementById("seconds").value
+
+) || 0;
+
+
+remainingTime =
+
+    (hours * 3600) +
+
+    (minutes * 60) +
+
+    seconds;
+
+
+if (remainingTime <= 0) {
+
+    document.getElementById("message").innerHTML =
+
+        "Please enter a time greater than zero.";
+
+    return;
+
+}
+
+
+totalTime = remainingTime;
+
+
+document.getElementById("message").innerHTML =
+
+    "Timer is running...";
+
+
+document.getElementById("progress-bar").style.width = "0%";
+
+
+displayCountdown();
+
+
+timer = setInterval(function() {
+
+    remainingTime--;
+
+    displayCountdown();
+
+
+    if (remainingTime <= 0) {
+
+        clearInterval(timer);
+
+        remainingTime = 0;
+
+        displayCountdown();
+
+
+        document.getElementById("message").innerHTML =
+
+            "Time is up!";
+
+
+        document.getElementById("progress-bar").style.width =
+
+            "100%";
+
+    }
+
+}, 1000);
+
+
+}
+
+/*
+This function cancels
+and resets the timer.
+*/
+
+function cancelTimer() {
+
+clearInterval(timer);
+
+
+remainingTime = 0;
+
+totalTime = 0;
+
+
+document.getElementById("countdown").innerHTML =
+
+    "00:00:00";
+
+
+document.getElementById("progress-bar").style.width =
+
+    "0%";
+
+
+document.getElementById("message").innerHTML =
+
+    "Timer cancelled.";
+
+
+}
+
+            </script>
+
+      </body>
+
+</html>
